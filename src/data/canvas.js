@@ -1,4 +1,4 @@
-import { Cell } from "./cell.js";
+import { Cell } from "../cell.js";
 
 export class Canvas {
 
@@ -26,12 +26,27 @@ export class Canvas {
         this.height = height;
 
         this.cells = [];
-        for (let x = 0; x < width; x++) {
-            for (let y = 0; y < height; y++) {
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
                 const cell = new Cell(x, y);
                 this.cells.push(cell);
             }
         }
+    }
+
+    /**
+     * @param {number} x 
+     * @param {number} y 
+     * @param {string} color 
+     */
+    paint(x, y, color) {
+        if (x < 0 || x >= this.width || y < 0 || y >= this.height) {
+            throw Error("Out of range");
+        }
+
+        const cell = this.cells[x + y * this.width];
+
+        cell.color = color;
     }
 
     toJson() {

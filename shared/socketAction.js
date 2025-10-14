@@ -1,0 +1,7 @@
+export const SERVER_ACTIONS = {
+    UPDATED_CANVAS: "UPDATED_CANVAS",
+};
+
+export const CLIENT_ACTIONS = {
+    PAINT_CELL: "PAINT_CELL",
+};
