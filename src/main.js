@@ -4,12 +4,17 @@ import { WebSocketServer } from 'ws';
 import { SocketHandler } from './socket/socketHandler.js';
 import { UserController } from './controllers/userController.js';
 import { CanvasController } from './controllers/canvasController.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const port = process.env.PORT;
 
 const app = express();
-const port = 4010;
-
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server, path: '/socket.io/' });
+
+app.use('/', express.static('canvas-client/dist'));
 
 const canvasController = new CanvasController();
 
