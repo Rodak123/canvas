@@ -13,14 +13,13 @@ export interface Api {
 }
 
 const ApiContext = createContext<Api | null>(null);
-const apiUrl = import.meta.env.VITE_SOCKET_URL;
 
 interface ApiContextProviderProps {
   children: React.ReactNode;
 }
 
 export const ApiContextProvider: React.FC<ApiContextProviderProps> = ({ children }) => {
-  const { sendMessage, lastMessage, readyState } = useWebSocket(apiUrl);
+  const { sendMessage, lastMessage, readyState } = useWebSocket('/socket.io/');
   const [apiMessage, setApiMessage] = useState<ApiMessage | null>(null);
 
   useEffect(() => {
