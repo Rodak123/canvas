@@ -1,6 +1,6 @@
 import type React from "react";
 import type { Canvas } from "../models/canvas";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export interface PaintCanvasProps {
   canvas: Canvas;
