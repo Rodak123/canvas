@@ -22,7 +22,7 @@ export class Cell {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.color = `#aaff00`;
+        this.color = `#0f0e11`;
     }
 
     toJson() {

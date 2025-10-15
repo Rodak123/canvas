@@ -13,8 +13,6 @@ export const App = () => {
   const [canvas, setCanvas] = useState<Canvas | null>(null);
 
   const paintCell = (x: number, y: number) => {
-    console.log('paiting', x, y, color);
-
     sendAction(CLIENT_ACTIONS.PAINT_CELL, {
       x, y, color
     });
@@ -40,8 +38,19 @@ export const App = () => {
     );
   }
 
+  if (window.innerWidth < 1000 || window.innerHeight < 1000) {
+    return (
+      <div className="d-flex justify-content-center align-items-center p-4">
+        <div>
+          <p className="fs-1">Sorry,</p>
+          <p className="fs-3">but this website has no mobile support</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="container d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+    <div className="d-flex justify-content-center align-items-center p-4" style={{ width: '100vw', height: '100vh', backgroundColor: color }}>
       <div className="d-flex justify-content-center">
         <PaintCanvas canvas={canvas} scale={12} paintCell={paintCell} />
         <div className="mx-2" />

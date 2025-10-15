@@ -1,6 +1,6 @@
 import type React from "react";
 import type { Canvas } from "../models/canvas";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export interface PaintCanvasProps {
   canvas: Canvas;
@@ -17,20 +17,22 @@ export const PaintCanvas: React.FC<PaintCanvasProps> = ({ canvas, scale, paintCe
     if (canvasRef.current === null) return;
     const canvas = canvasRef.current;
 
-    canvas.onclick = (e) => {
+    const tryPaint = (mouseX: number, mouseY: number) => {
       const rect = canvas.getBoundingClientRect();
-
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
-
-      const x = Math.floor(mouseX / scale);
-      const y = Math.floor(mouseY / scale);
+      const x = Math.floor((mouseX - rect.left) / scale);
+      const y = Math.floor((mouseY - rect.top) / scale);
 
       paintCell(x, y);
     };
 
+    const handleMouseDown = (e: MouseEvent) => {
+      tryPaint(e.clientX, e.clientY);
+    };
+
+    canvas.addEventListener('mousedown', handleMouseDown);
+
     return () => {
-      canvas.onclick = () => { };
+      canvas.removeEventListener('mousedown', handleMouseDown);
     };
   }, [canvasRef, scale, paintCell]);
 
@@ -50,7 +52,6 @@ export const PaintCanvas: React.FC<PaintCanvasProps> = ({ canvas, scale, paintCe
 
   return (
     <div>
-      <p>width: {canvas.width}, height: {canvas.width}</p>
       <canvas ref={canvasRef} width={canvas.width * scale} height={canvas.height * scale} />
     </div>
   );
