@@ -19,20 +19,20 @@ export const App = () => {
   };
 
   useEffect(() => {
-    if (apiMessage == null) return;
+    if (apiMessage === null) return;
 
     if (apiMessage.action === SERVER_ACTIONS.UPDATED_CANVAS) {
       setCanvas(apiMessage.data as Canvas);
     }
   }, [apiMessage]);
 
-  if (readyState != ReadyState.OPEN) {
+  if (readyState !== ReadyState.OPEN) {
     return (
       <Loader text="Connecting" />
     );
   }
 
-  if (canvas == null) {
+  if (canvas === null) {
     return (
       <Loader />
     );

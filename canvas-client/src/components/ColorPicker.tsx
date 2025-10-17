@@ -1,6 +1,6 @@
 import type React from "react";
-import { useEffect, useState } from "react";
 import Color from 'color';
+import { useColors } from "../hooks/useColors";
 
 interface ColorPickerProps {
   color: string;
@@ -8,25 +8,8 @@ interface ColorPickerProps {
 }
 
 export const ColorPicker: React.FC<ColorPickerProps> = ({ color, setColor }) => {
-  const [colors, setColors] = useState<string[]>([]);
+  const { colors } = useColors();
   const currentColor = Color(color);
-
-  useEffect(() => {
-    const fetchColors = async () => {
-      const response = await fetch('/palette.txt');
-      if (!response.ok) {
-        throw Error("Failed to fetch colors")
-      }
-
-      const txt = await response.text();
-      const lines = txt
-        .split(/\r?\n/)
-        .filter((val) => val.length > 0);
-      setColors(lines);
-    };
-
-    fetchColors();
-  }, []);
 
   const textColor = currentColor.isDark() ? '#ffffff' : '#000000';
 

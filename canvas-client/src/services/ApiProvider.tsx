@@ -19,11 +19,11 @@ interface ApiContextProviderProps {
 }
 
 export const ApiContextProvider: React.FC<ApiContextProviderProps> = ({ children }) => {
-  const { sendMessage, lastMessage, readyState } = useWebSocket('wss://draw.racode.cz/socket.io/');
+  const { sendMessage, lastMessage, readyState } = useWebSocket(import.meta.env.VITE_SOCKET_URL);
   const [apiMessage, setApiMessage] = useState<ApiMessage | null>(null);
 
   useEffect(() => {
-    if (lastMessage == null) return;
+    if (lastMessage === null) return;
 
     const data = JSON.parse(lastMessage.data);
     const newApiMessage = data as ApiMessage;
@@ -42,7 +42,7 @@ export const ApiContextProvider: React.FC<ApiContextProviderProps> = ({ children
     <ApiContext.Provider value={{
       readyState,
       apiMessage,
-      sendAction
+      sendAction,
     }}>
       {children}
     </ApiContext.Provider>
