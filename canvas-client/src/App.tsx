@@ -6,14 +6,20 @@ import { Loader } from "./components/Loader";
 import { PaintCanvas } from "./components/PaintCanvas";
 import { CLIENT_ACTIONS, SERVER_ACTIONS } from "../../shared/socketAction.js";
 import { ColorPicker } from "./components/ColorPicker.js";
+import { map } from "./utilities/map.js";
+
+const getScale = () => Math.round(map(window.innerWidth, 768, 1920, 8, 16));
 
 export const App = () => {
   const { readyState, apiMessage, sendAction } = useApi();
   const [color, setColor] = useState<string>('#ffffff');
   const [canvas, setCanvas] = useState<Canvas | null>(null);
 
+  const [scale, setScale] = useState<number>(getScale);
+
   const paintCell = (x: number, y: number) => {
     sendAction(CLIENT_ACTIONS.PAINT_CELL, { x, y, color });
+    if (canvas) canvas.cells[x + y * canvas.width].color = color;
   };
 
   useEffect(() => {
@@ -23,6 +29,14 @@ export const App = () => {
     }
   }, [apiMessage]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setScale(getScale);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   if (readyState !== ReadyState.OPEN) {
     return <Loader text="Connecting" />;
   }
@@ -30,10 +44,6 @@ export const App = () => {
   if (!canvas) {
     return <Loader />;
   }
-
-  // Determine scale based on viewport width (smaller on mobile)
-  const isMobile = window.innerWidth < 768;
-  const scale = isMobile ? 6 : 12;
 
   return (
     <div
@@ -46,7 +56,7 @@ export const App = () => {
       }}
     >
       <div
-        className="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3"
+        className="d-flex justify-content-center flex-column flex-md-row gap-3"
         style={{
           width: "100%",
           maxWidth: "100%",

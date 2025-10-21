@@ -51,8 +51,13 @@ export const PaintCanvas: React.FC<PaintCanvasProps> = ({ canvas, scale, paintCe
   }, [canvasRef, canvas, scale]);
 
   return (
-    <div>
-      <canvas ref={canvasRef} width={canvas.width * scale} height={canvas.height * scale} />
+    <div className="position-relative d-flex justify-content-center">
+      <canvas
+        className="border rounded"
+        ref={canvasRef}
+        width={canvas.width * scale}
+        height={canvas.height * scale}
+      />
     </div>
   );
 };

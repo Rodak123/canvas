@@ -5,6 +5,7 @@ const paletteUri = '/palette.txt';
 
 export const useColors = () => {
     const [colors, setColors] = useState<string[]>([]);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
         const fetchColors = async () => {
@@ -16,10 +17,11 @@ export const useColors = () => {
             const txt = await response.text();
             const palette = parsePalette(txt);
             setColors(palette);
+            setIsLoaded(true);
         };
 
         fetchColors();
     }, []);
 
-    return { colors }
+    return { colors, isLoaded }
 };
