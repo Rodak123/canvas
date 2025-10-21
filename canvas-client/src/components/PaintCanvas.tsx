@@ -19,8 +19,14 @@ export const PaintCanvas: React.FC<PaintCanvasProps> = ({ canvas, scale, paintCe
 
     const tryPaint = (mouseX: number, mouseY: number) => {
       const rect = canvas.getBoundingClientRect();
-      const x = Math.floor((mouseX - rect.left) / scale);
-      const y = Math.floor((mouseY - rect.top) / scale);
+
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+
+      const x = Math.floor((mouseX - rect.left) * scaleX / scale);
+      const y = Math.floor((mouseY - rect.top) * scaleY / scale);
+
+      if (x < 0 || x >= canvas.width || y < 0 || y >= canvas.height) return;
 
       paintCell(x, y);
     };

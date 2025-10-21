@@ -19,7 +19,8 @@ export const App = () => {
 
   const paintCell = (x: number, y: number) => {
     sendAction(CLIENT_ACTIONS.PAINT_CELL, { x, y, color });
-    if (canvas) canvas.cells[x + y * canvas.width].color = color;
+    const cell = canvas?.cells[x + y * canvas.width];
+    if (cell) cell.color = color;
   };
 
   useEffect(() => {
