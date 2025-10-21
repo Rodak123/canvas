@@ -1,4 +1,5 @@
-import { Canvas } from "../data/canvas.js";
+import { Canvas } from "../models/canvas.js";
+import { loadCanvas, saveCanvas } from "../db.js";
 
 export class CanvasController {
 
@@ -13,7 +14,8 @@ export class CanvasController {
     _canvasUpdatedListeners = [];
 
     constructor() {
-        this._canvas = new Canvas(64, 64);
+        const loaded = loadCanvas();
+        this._canvas = loaded ?? new Canvas(64, 64);
     }
 
     /**
@@ -31,6 +33,7 @@ export class CanvasController {
     }
 
     _invokeCanvasUpdated() {
+        saveCanvas(this._canvas);
         this._canvasUpdatedListeners.forEach(listener => {
             listener();
         });

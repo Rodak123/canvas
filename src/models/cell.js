@@ -1,5 +1,11 @@
 export class Cell {
 
+    static fromJson(json) {
+        const cell = new Cell(json.x, json.y);
+        cell.color = json.color ?? '#0f0e11';
+        return cell;
+    }
+
     /**
      * @type {number}
      */

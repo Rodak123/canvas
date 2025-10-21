@@ -1,6 +1,14 @@
-import { Cell } from "../cell.js";
+import { Cell } from "./cell.js";
 
 export class Canvas {
+
+    static fromJson(json) {
+        const canvas = new Canvas(json.width, json.height);
+        json.cells.forEach((cell, i) => {
+            canvas.cells[i] = Cell.fromJson(cell);
+        });
+        return canvas;
+    }
 
     /**
      * @type {number}
