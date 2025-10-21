@@ -13,49 +13,49 @@ export const App = () => {
   const [canvas, setCanvas] = useState<Canvas | null>(null);
 
   const paintCell = (x: number, y: number) => {
-    sendAction(CLIENT_ACTIONS.PAINT_CELL, {
-      x, y, color
-    });
+    sendAction(CLIENT_ACTIONS.PAINT_CELL, { x, y, color });
   };
 
   useEffect(() => {
-    if (apiMessage === null) return;
-
+    if (!apiMessage) return;
     if (apiMessage.action === SERVER_ACTIONS.UPDATED_CANVAS) {
       setCanvas(apiMessage.data as Canvas);
     }
   }, [apiMessage]);
 
   if (readyState !== ReadyState.OPEN) {
-    return (
-      <Loader text="Connecting" />
-    );
+    return <Loader text="Connecting" />;
   }
 
-  if (canvas === null) {
-    return (
-      <Loader />
-    );
+  if (!canvas) {
+    return <Loader />;
   }
 
-  if (window.innerWidth < 1000 || window.innerHeight < 1000) {
-    return (
-      <div className="d-flex justify-content-center align-items-center p-4">
-        <div>
-          <p className="fs-1">Sorry,</p>
-          <p className="fs-3">but this website has no mobile support</p>
-        </div>
-      </div>
-    );
-  }
+  // Determine scale based on viewport width (smaller on mobile)
+  const isMobile = window.innerWidth < 768;
+  const scale = isMobile ? 6 : 12;
 
   return (
-    <div className="d-flex justify-content-center align-items-center p-4" style={{ width: '100vw', height: '100vh', backgroundColor: color }}>
-      <div className="d-flex justify-content-center">
-        <PaintCanvas canvas={canvas} scale={12} paintCell={paintCell} />
-        <div className="mx-2" />
+    <div
+      className="d-flex flex-column justify-content-center align-items-center p-2"
+      style={{
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: color,
+        overflow: "hidden",
+      }}
+    >
+      <div
+        className="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3"
+        style={{
+          width: "100%",
+          maxWidth: "100%",
+          overflowX: "auto",
+        }}
+      >
+        <PaintCanvas canvas={canvas} scale={scale} paintCell={paintCell} />
         <ColorPicker color={color} setColor={setColor} />
       </div>
     </div>
   );
-}
+};
